@@ -7,6 +7,7 @@
 
 import UIKit
 
+// enum содержащий набор кейсов с обозначением положения объекта анимации
 enum RectanglePosition: CaseIterable {
     case center
     case topLeftCorner
@@ -14,6 +15,7 @@ enum RectanglePosition: CaseIterable {
     case bottomRightCorner
     case bottomLeftCorner
     
+    // функция отвечающая за перебор кейсов enum по очереди
     func next() -> Self {
         let all = Self.allCases
         let idx = all.firstIndex(of: self)!
@@ -30,8 +32,13 @@ class AnimationModel {
     init(vc: ViewController) {
         self.childVc = vc
     }
+    //    MARK: - Animation setup
+    /* коэффициенты для изменения общей формулы подсчета преобразования при движении в определенное место экрана
+     знак "-" для оси X это перемещение влево, а "+" вправо относительно исходной позиции в центре
+     знак "-" для оси Y это перемещение вверх, а "+" вниз относительно исходной позиции в центре*/
     private let toTheLeft = -1 , toTheRight = 1, toTheTop = -1, toTheBottom = 1, center = 0
     
+    // функция описывающая преобразование, применяемое к объекту анимации относительно центра его границ
     private func direction(xDirection: Int, yDirection: Int, isRotation: Bool) {
         let x = ((vc.view.frame.width/2) - (vc.animationRectangle.frame.width/2)), y = ((vc.view.frame.height/2) - (vc.animationRectangle.frame.height/2))
         if isRotation {
@@ -49,6 +56,7 @@ class AnimationModel {
         }
     }
     
+    // функция применяюющая нужный набор коэф-тов на вход функции direction()
     func animateToPosition(_ position: RectanglePosition) {
         UIView.animate(withDuration: 2) { [self] in
             switch position {
@@ -65,7 +73,8 @@ class AnimationModel {
             }
         }
     }
-    
+    //    MARK: - Gestures setup
+    // активация pan и rotate жестов и их применение к объекту анимации
     func setupGestures() {
         let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotateTriggered))
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panTriggered))
@@ -73,8 +82,9 @@ class AnimationModel {
         vc.animationRectangle.addGestureRecognizer(rotateGesture)
     }
 }
-
+// MARK: - IBActions of Gestures
 extension AnimationModel {
+    // функция смещения объекта при активации на нем жеста pan
     @objc private func panTriggered(sender: UIPanGestureRecognizer) {
         if sender.state == .began || sender.state == .changed {
             let translation = sender.translation(in: self.vc.view)
@@ -82,7 +92,7 @@ extension AnimationModel {
             sender.setTranslation(.zero, in: vc.view)
         }
     }
-    
+    // функция вращения объекта при активации на нем жеста rotate
     @objc private func rotateTriggered(gestureRecognizer: UIRotationGestureRecognizer) {
         if let view = gestureRecognizer.view {
             view.transform = view.transform.rotated(by: gestureRecognizer.rotation)

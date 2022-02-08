@@ -12,8 +12,8 @@ class ViewController: UIViewController {
     private let animationButton = UIButton(type: .system)
     private var rectanglePosition: RectanglePosition = .center
     private lazy var animationModelVc = {
-            AnimationModel.init(vc: self)
-        }()
+        AnimationModel.init(vc: self)
+    }()
     
     
     override func viewDidLoad() {
@@ -25,12 +25,13 @@ class ViewController: UIViewController {
         view.isUserInteractionEnabled = true
     }
     
+    // передергивает вид при провороте экрана чтобы квадратик не "улетал"
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         animationModelVc.animateToPosition(rectanglePosition)
     }
     //    MARK: - VIEW setuping:
-    
+    // настройка View квадратика
     private func animationRectangleSetup() {
         let viewR = animationRectangle
         viewR.translatesAutoresizingMaskIntoConstraints = false
@@ -45,6 +46,7 @@ class ViewController: UIViewController {
         ])
     }
     
+    // настройка View кнопки
     private func animationButtonSetup() {
         let button = animationButton
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -68,6 +70,8 @@ class ViewController: UIViewController {
 //    MARK: - IBAction for button
 
 extension ViewController {
+    /* при нажатии на кнопку перебирается enum по очереди при помощи функции next() в нем
+     затем дергается функция, отвечающая за анимацию animateToPosition() где на вход приходит новое значение позиции rectanglePosition из enum */
     @objc private func animationButtonTapped() {
         rectanglePosition = rectanglePosition.next()
         animationModelVc.animateToPosition(rectanglePosition)

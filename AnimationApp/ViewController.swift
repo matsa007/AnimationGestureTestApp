@@ -80,5 +80,10 @@ extension ViewController {
 
 
 
+//private lazy var logoImageView: UIImageView = {
+//    let imageView = UIImageView()
+//    imageView.image = UIImage(named: "logo")
+//    return imageView
+//}()
 
 

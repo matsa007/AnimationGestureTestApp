@@ -78,6 +78,8 @@ class AnimationModel {
     func setupGestures() {
         let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotateTriggered))
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panTriggered))
+//        rotateGesture.delegate = self
+//        panGesture.delegate = self
         vc.animationRectangle.addGestureRecognizer(panGesture)
         vc.animationRectangle.addGestureRecognizer(rotateGesture)
     }
